@@ -6,7 +6,7 @@ class UserModel {
 
   UserModel({required this.uid, required this.isAdmin});
 
-  UserModel fromSnap(DocumentSnapshot ds) {
+  factory UserModel.fromSnap(DocumentSnapshot ds) {
     Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
     return UserModel(uid: data['uid'], isAdmin: data['isAdmin']);
   }
