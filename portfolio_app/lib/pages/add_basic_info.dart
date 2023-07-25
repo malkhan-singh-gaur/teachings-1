@@ -17,9 +17,14 @@ class _AddNamePageState extends State<AddBasicInfo> {
   CvModel? cvModel;
 
   TextEditingController name = TextEditingController();
+  TextEditingController currentJob = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController address = TextEditingController();
+
+  TextEditingController twitter = TextEditingController();
+  TextEditingController linkedIn = TextEditingController();
+  TextEditingController gitHub = TextEditingController();
 
   getUserPortfolio() async {
     CvModel cv = await firestore.getCv();
@@ -28,6 +33,9 @@ class _AddNamePageState extends State<AddBasicInfo> {
     phone = TextEditingController(text: cv.phone);
     email = TextEditingController(text: cv.email);
     address = TextEditingController(text: cv.address);
+    twitter = TextEditingController(text: cv.twitterLink);
+    linkedIn = TextEditingController(text: cv.linkedInLink);
+    gitHub = TextEditingController(text: cv.gitHubLink);
     setState(() {});
   }
 
@@ -47,9 +55,17 @@ class _AddNamePageState extends State<AddBasicInfo> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Variables.buildField(name, 'Enter your name'),
+            Variables.buildField(currentJob, 'Enter your Current Job'),
             Variables.buildField(phone, 'Phone number'),
             Variables.buildField(email, 'Email'),
             Variables.buildField(address, 'Your Address'),
+            const Text(
+              'Links',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            Variables.buildField(twitter, 'Twitter'),
+            Variables.buildField(linkedIn, 'LinkedIn'),
+            Variables.buildField(gitHub, 'Github'),
             const SizedBox(height: 10),
             ElevatedButton(
               child: const Text('Save'),
@@ -61,11 +77,19 @@ class _AddNamePageState extends State<AddBasicInfo> {
                     phone: phone.text,
                     email: email.text,
                     address: address.text,
+                    twitterLink: twitter.text.trim(),
+                    linkedInLink: linkedIn.text.trim(),
+                    gitHubLink: gitHub.text.trim(),
                     aboutInfo: cvModel!.aboutInfo,
                     skills: cvModel!.skills,
                     experience: cvModel!.experience,
                     projects: cvModel!.projects,
                     languages: cvModel!.languages,
+                    currentJob: cvModel!.currentJob,
+                    education: cvModel!.education,
+                    achievements: cvModel!.achievements,
+                    programmingLanguages: cvModel!.programmingLanguages,
+                    hobbies: cvModel!.hobbies,
                   );
                   await firestore.editCv(model.toJson()).then(
                     (value) {

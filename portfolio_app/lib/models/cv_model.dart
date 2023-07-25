@@ -3,14 +3,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CvModel {
   final String uid;
   final String name;
+  final String currentJob;
+  final String twitterLink;
+  final String linkedInLink;
+  final String gitHubLink;
   final String phone;
   final String email;
   final String address;
   final String aboutInfo;
   final List skills;
   final List experience;
-  final List projects;
+  final List education;
+  final List achievements;
+  final List programmingLanguages;
   final List languages;
+  final List hobbies;
+  final List projects;
 
   CvModel({
     required this.uid,
@@ -23,6 +31,14 @@ class CvModel {
     required this.experience,
     required this.projects,
     required this.languages,
+    required this.currentJob,
+    required this.twitterLink,
+    required this.linkedInLink,
+    required this.gitHubLink,
+    required this.education,
+    required this.achievements,
+    required this.programmingLanguages,
+    required this.hobbies,
   });
 
   factory CvModel.fromSnap(DocumentSnapshot ds) {
@@ -38,6 +54,14 @@ class CvModel {
       experience: data['experience'] ?? [],
       projects: data['projects'] ?? [],
       languages: data['languages'] ?? [],
+      currentJob: data['currentJob'] ?? '',
+      twitterLink: data['twitterLink'] ?? '',
+      linkedInLink: data['linkedInLink'] ?? '',
+      gitHubLink: data['gitHubLink'] ?? '',
+      education: data['education'] ?? [],
+      achievements: data['achievements'] ?? [],
+      programmingLanguages: data['programmingLanguages'] ?? [],
+      hobbies: data['hobbies'] ?? [],
     );
   }
 
@@ -53,6 +77,14 @@ class CvModel {
       'experience': experience,
       'projects': projects,
       'languages': languages,
+      'currentJob': currentJob,
+      'twitterLink': twitterLink,
+      'linkedInLink': linkedInLink,
+      'gitHubLink': gitHubLink,
+      'education': education,
+      'achievements': achievements,
+      'programmingLanguages': programmingLanguages,
+      'hobbies': hobbies,
     };
     return data;
   }

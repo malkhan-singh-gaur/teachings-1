@@ -7,8 +7,9 @@ class Variables {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          hintText: hint,
+          isDense: true,
+          border: const OutlineInputBorder(),
+          label: Text(hint),
         ),
       ),
     );

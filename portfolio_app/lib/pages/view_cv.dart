@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_app/methods/firestore_methods.dart';
 import 'package:portfolio_app/models/cv_model.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class ViewCv extends StatefulWidget {
   const ViewCv({super.key});
@@ -32,31 +33,53 @@ class _ViewCvState extends State<ViewCv> {
       appBar: AppBar(title: const Text('Your cv')),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
+          : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   cvHeader(),
-                  const SizedBox(height: 10),
-                  Text(
-                    'About ${model.name}',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text(model.aboutInfo),
                   ),
-                  const Divider(),
-                  Text(
-                    model.aboutInfo,
-                    style: const TextStyle(fontSize: 18),
-                  )
+                  headingText('Skills and Competencies'),
+                  for (var skill in model.skills)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: skillText(skill),
+                    ),
                 ],
               ),
             ),
     );
   }
 
+  Widget headingText(String text) {
+    return ListTile(
+      leading: const Icon(Icons.category),
+      title: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  Widget skillText(String text) {
+    return ListTile(
+      leading: const Icon(Icons.star),
+      contentPadding: EdgeInsets.zero,
+      dense: true,
+      title: Text(text),
+    );
+  }
+
   Widget cvHeader() {
     return Container(
-      color: Colors.black54,
+      color: Colors.black87,
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,25 +94,82 @@ class _ViewCvState extends State<ViewCv> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Phone: ${model.phone}',
-                  style: const TextStyle(color: Colors.white),
+                Wrap(
+                  children: [
+                    paddingText('Phone:', model.phone),
+                    if (model.twitterLink.isNotEmpty)
+                      paddingText('Twitter:', model.twitterLink),
+                  ],
                 ),
-                Text(
-                  'Email: ${model.email}',
-                  style: const TextStyle(color: Colors.white),
+                Wrap(
+                  children: [
+                    paddingText('Email:', model.email),
+                    if (model.twitterLink.isNotEmpty)
+                      paddingText('GitHub:', model.gitHubLink),
+                  ],
+                ),
+                Wrap(
+                  children: [
+                    paddingText('Address:', model.address),
+                    if (model.twitterLink.isNotEmpty)
+                      paddingText('LinkedIn:', model.linkedInLink),
+                  ],
                 ),
               ],
             ),
           ),
-          Text(
-            'Address: ${model.address}',
-            style: const TextStyle(color: Colors.white),
-          ),
         ],
+      ),
+    );
+  }
+
+  bool isLink(String text) {
+    if (text.startsWith('http') || text.startsWith('www')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  Widget paddingText(String hint, String text) {
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: InkWell(
+        onTap: isLink(text)
+            ? () async {
+                String link = text.replaceAll('www.', 'https://');
+                Uri? uri = Uri.tryParse(link);
+                if (uri != null) {
+                  bool isLink = await launcher.canLaunchUrl(uri);
+                  if (isLink) {
+                    await launcher.launchUrl(uri);
+                  }
+                }
+              }
+            : null,
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '$hint ',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              TextSpan(
+                text: text,
+                style: TextStyle(
+                  color: isLink(text) ? Colors.blue : Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
