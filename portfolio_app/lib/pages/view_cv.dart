@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_app/methods/firestore_methods.dart';
 import 'package:portfolio_app/models/cv_model.dart';
+import 'package:portfolio_app/models/experience.dart';
+import 'package:portfolio_app/variables.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class ViewCv extends StatefulWidget {
@@ -43,15 +45,73 @@ class _ViewCvState extends State<ViewCv> {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Text(model.aboutInfo),
                   ),
+                  const Divider(),
                   headingText('Skills and Competencies'),
                   for (var skill in model.skills)
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: skillText(skill),
                     ),
+                  const Divider(),
+                  headingText('Educational Background'),
+                  for (var education in model.education
+                      .map((e) => ExperienceModel.fromJson(e))
+                      .toList())
+                    experienceText(education),
+                  const Divider(),
+                  headingText('Work Experience'),
+                  for (var education in model.experience
+                      .map((e) => ExperienceModel.fromJson(e))
+                      .toList())
+                    experienceText(education),
                 ],
               ),
             ),
+    );
+  }
+
+  Padding experienceText(ExperienceModel education) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Variables.getMonthYear(education.dateStarted),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  Variables.getMonthYear(education.dateFinished),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                education.title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(education.description),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

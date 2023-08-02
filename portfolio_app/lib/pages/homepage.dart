@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_app/pages/add_about.dart';
 import 'package:portfolio_app/pages/add_basic_info.dart';
+import 'package:portfolio_app/pages/add_experience.dart';
 import 'package:portfolio_app/pages/add_skills.dart';
 import 'package:portfolio_app/pages/view_cv.dart';
 import 'package:portfolio_app/variables.dart';
@@ -43,6 +44,18 @@ class _HomePageState extends State<HomePage> {
             OutlinedButton(
               onPressed: () => Variables.push(context, const AddSkillPage()),
               child: const Text('Add skills'),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: () => Variables.push(
+                  context, const AddExperiences(isEducation: true)),
+              child: const Text('Add Educational Background'),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: () => Variables.push(
+                  context, const AddExperiences(isEducation: false)),
+              child: const Text('Add Work Experiences'),
             ),
             const SizedBox(height: 10),
           ],

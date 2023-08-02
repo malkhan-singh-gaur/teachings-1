@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Variables {
@@ -46,5 +47,17 @@ class Variables {
 
   static replace(context, Widget page) {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => page));
+  }
+
+  static String getDateString(Timestamp date) {
+    DateTime dateTime = date.toDate();
+    String stringDate = '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+    return stringDate;
+  }
+
+  static String getMonthYear(Timestamp date) {
+    DateTime dateTime = date.toDate();
+    String stringDate = '${dateTime.month}-${dateTime.year}';
+    return stringDate;
   }
 }
